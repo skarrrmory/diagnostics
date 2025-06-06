@@ -1,0 +1,396 @@
+пример простого приложения Windows Forms на C#, в котором реализован переход между двумя формами по нажатию кнопки.
+
+1. Создайте новое Windows Forms приложение в Visual Studio.
+
+2. Добавьте две формы: Form1 и Form2.
+
+▎Код для Form1
+
+using System;
+using System.Windows.Forms;
+
+namespace YourNamespace
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void buttonOpenForm2_Click(object sender, EventArgs e)
+        {
+            // Создаем экземпляр Form2
+            Form2 form2 = new Form2();
+            // Показываем Form2
+            form2.Show();
+            // Скрываем текущую форму (Form1)
+            this.Hide();
+        }
+    }
+}
+
+
+▎Код для Form2
+
+using System;
+using System.Windows.Forms;
+
+namespace YourNamespace
+{
+    public partial class Form2 : Form
+    {
+        public Form2()
+        {
+            InitializeComponent();
+        }
+
+        private void buttonBackToForm1_Click(object sender, EventArgs e)
+        {
+            // Создаем экземпляр Form1
+            Form1 form1 = new Form1();
+            // Показываем Form1
+            form1.Show();
+            // Скрываем текущую форму (Form2)
+            this.Hide();
+        }
+    }
+}
+
+
+▎Шаги для создания кнопок
+
+1. На Form1 добавьте кнопку и назовите её buttonOpenForm2. Установите обработчик события Click на метод buttonOpenForm2_Click.
+
+   
+2. На Form2 добавьте кнопку и назовите её buttonBackToForm1. Установите обработчик события Click на метод buttonBackToForm1_Click.
+
+▎Примечания
+
+• Не забудьте добавить соответствующие пространства имен, если они отсутствуют.
+
+• Если вы хотите, чтобы форма закрывалась полностью, вместо того чтобы скрывать её, вы можете использовать this.Close();, но тогда вам нужно будет заново создавать экземпляр формы при каждом открытии.
+
+• Вы можете использовать ShowDialog() вместо Show(), если хотите, чтобы вторая форма была модальной.
+
+
+
+Конечно! Вот несколько полезных обработчиков событий, которые могут пригодиться в приложении Windows Forms. Я приведу примеры для Form1 и Form2, включая обработчики для кнопок, загрузки формы и других взаимодействий.
+
+▎Обработчики для Form1
+
+using System;
+using System.Windows.Forms;
+
+namespace YourNamespace
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void buttonOpenForm2_Click(object sender, EventArgs e)
+        {
+            Form2 form2 = new Form2();
+            form2.Show();
+            this.Hide();
+        }
+
+        // Обработчик события загрузки формы
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Код, который выполняется при загрузке формы
+            MessageBox.Show("Добро пожаловать в Form1!");
+        }
+
+        // Обработчик события закрытия формы
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Подтверждение закрытия формы
+            var result = MessageBox.Show("Вы уверены, что хотите закрыть приложение?", "Подтверждение", MessageBoxButtons.YesNo);
+            if (result == DialogResult.No)
+            {
+                e.Cancel = true; // Отменяет закрытие формы
+            }
+        }
+    }
+}
+
+
+▎Обработчики для Form2
+
+using System;
+using System.Windows.Forms;
+
+namespace YourNamespace
+{
+    public partial class Form2 : Form
+    {
+        public Form2()
+        {
+            InitializeComponent();
+        }
+
+        private void buttonBackToForm1_Click(object sender, EventArgs e)
+        {
+            Form1 form1 = new Form1();
+            form1.Show();
+            this.Hide();
+        }
+
+        // Обработчик события загрузки формы
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            // Код, который выполняется при загрузке формы
+            MessageBox.Show("Вы находитесь в Form2!");
+        }
+
+        // Обработчик события для текстового поля (например, для проверки ввода)
+        private void textBoxInput_TextChanged(object sender, EventArgs e)
+        {
+            // Проверка длины текста в текстовом поле
+            if (textBoxInput.Text.Length > 10)
+            {
+                MessageBox.Show("Слишком длинный ввод! Максимум 10 символов.");
+                textBoxInput.Text = textBoxInput.Text.Substring(0, 10); // Обрезаем текст до 10 символов
+                textBoxInput.SelectionStart = textBoxInput.Text.Length; // Устанавливаем курсор в конец
+            }
+        }
+    }
+}
+
+
+▎Дополнительные обработчики
+
+1. Обработчик для кнопки "Сохранить":
+   Если у вас есть кнопка для сохранения данных, вы можете создать обработчик:
+
+   
+   private void buttonSave_Click(object sender, EventArgs e)
+   {
+       // Логика сохранения данных
+       MessageBox.Show("Данные сохранены!");
+   }
+   
+
+2. Обработчик для события KeyPress:
+   Если вам нужно обрабатывать нажатия клавиш в текстовом поле:
+
+   
+   private void textBoxInput_KeyPress(object sender, KeyPressEventArgs e)
+   {
+       // Пример: запретить ввод цифр
+       if (char.IsDigit(e.KeyChar))
+       {
+           e.Handled = true; // Отменяем ввод цифры
+           MessageBox.Show("Цифры не допускаются!");
+       }
+   }
+   
+
+3. Обработчик для изменения размера формы:
+   Если вам нужно выполнять действия при изменении размера формы:
+
+   
+   private void Form1_Resize(object sender, EventArgs e)
+   {
+       // Логика при изменении размера формы
+       Console.WriteLine("Форма изменена!");
+   }
+   
+
+▎Регистрация обработчиков событий
+
+Не забудьте зарегистрировать обработчики событий в конструкторе формы или через дизайнер форм. Например:
+
+this.Load += new System.EventHandler(this.Form1_Load);
+this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+
+
+Эти обработчики помогут вам управлять различными событиями в вашем приложении и улучшат пользовательский опыт.
+
+
+ChatGPT 4.5 | DeepSeek | Midjourney, [07.06.2025 0:38]
+Работа с DataGridView в Windows Forms с данными из SQL Server включает несколько этапов: подключение к базе данных, выполнение SQL-запроса, загрузка данных в DataGridView и обработка событий. Давайте рассмотрим этот процесс шаг за шагом.
+
+▎Шаг 1: Подключение к SQL Server
+
+Для начала вам нужно установить соединение с вашей базой данных SQL Server. Для этого используйте SqlConnection из пространства имен System.Data.SqlClient.
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+
+namespace YourNamespace
+{
+    public partial class Form1 : Form
+    {
+        private string connectionString = "Data Source=your_server;Initial Catalog=your_database;Integrated Security=True"; // Укажите свои параметры подключения
+
+        public Form1()
+        {
+            InitializeComponent();
+            LoadData();
+        }
+
+        private void LoadData()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter("SELECT * FROM YourTable", connection);
+                    DataTable dataTable = new DataTable();
+                    dataAdapter.Fill(dataTable);
+                    dataGridView1.DataSource = dataTable; // Привязка данных к DataGridView
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка при загрузке данных: " + ex.Message);
+                }
+            }
+        }
+    }
+}
+
+
+▎Шаг 2: Настройка DataGridView
+
+После того как данные загружены в DataGridView, вы можете настроить его для улучшения пользовательского опыта. Например:
+
+• Установите заголовки столбцов.
+
+• Настройте ширину столбцов.
+
+• Установите режим редактирования.
+
+Пример настройки:
+
+private void SetupDataGridView()
+{
+    dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill; // Автоматическая ширина столбцов
+    dataGridView1.ReadOnly = true; // Сделать DataGridView только для чтения
+    dataGridView1.AllowUserToAddRows = false; // Запретить добавление новых строк пользователем
+}
+
+
+▎Шаг 3: Обработка событий
+
+Вы можете обрабатывать различные события, такие как выбор строки, изменение данных и т.д. Например, если вы хотите обрабатывать выбор строки:
+
+private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+{
+    if (dataGridView1.SelectedRows.Count > 0)
+    {
+        var selectedRow = dataGridView1.SelectedRows[0];
+        // Получение данных из выбранной строки
+        string value = selectedRow.Cells["YourColumnName"].Value.ToString();
+        MessageBox.Show("Вы выбрали: " + value);
+    }
+}
+
+
+▎Шаг 4: Обновление данных в базе данных
+
+Если вы хотите обновлять данные в базе данных после редактирования в DataGridView, вам нужно будет выполнить соответствующий SQL-запрос. Вот пример, как это можно сделать:
+
+private void UpdateData(int id, string newValue)
+{
+    using (SqlConnection connection = new SqlConnection(connectionString))
+    {
+        string query = "UPDATE YourTable SET YourColumnName = @newValue WHERE Id = @id";
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@newValue", newValue);
+            command.Parameters.AddWithValue("@id", id);
+            connection.Open();
+            command.ExecuteNonQuery();
+        }
+    }
+}
+
+
+▎Шаг 5: Завершение работы с формой
+
+Не забудьте добавить обработчик для закрытия формы и освобождения ресурсов:
+
+private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+{
+    // Освобождение ресурсов, если необходимо
+}
+
+
+▎Полный пример
+
+Вот как может выглядеть полный код формы с DataGridView, загружающим данные из SQL Server:
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+
+namespace YourNamespace
+{
+    public partial class Form1 : Form
+    {
+
+ChatGPT 4.5 | DeepSeek | Midjourney, [07.06.2025 0:38]
+        private string connectionString = "Data Source=your_server;Initial Catalog=your_database;Integrated Security=True";
+
+        public Form1()
+        {
+            InitializeComponent();
+            LoadData();
+            SetupDataGridView();
+        }
+
+        private void LoadData()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter("SELECT * FROM YourTable", connection);
+                    DataTable dataTable = new DataTable();
+                    dataAdapter.Fill(dataTable);
+                    dataGridView1.DataSource = dataTable;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка при загрузке данных: " + ex.Message);
+                }
+            }
+        }
+
+        private void SetupDataGridView()
+        {
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.ReadOnly = true;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
+        }
+
+        private void DataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGridView1.SelectedRows[0];
+                string value = selectedRow.Cells["YourColumnName"].Value.ToString();
+                MessageBox.Show("Вы выбрали: " + value);
+            }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Освобождение ресурсов, если необходимо
+        }
+    }
+}
+
+
+Этот код демонстрирует основные шаги для работы с DataGridView и SQL Server. Вы можете адаптировать его под свои нужды, добавляя дополнительные функции и обработчики событий по мере необходимости.
